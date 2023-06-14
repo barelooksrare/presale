@@ -1,0 +1,33 @@
+[features]
+seeds = false
+skip-lint = false
+[programs.localnet]
+presale = "ETTfbsihcY4rcAWdo4G7pATGNfr744LPv4ziheRz5EPu"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "Localnet"
+wallet = "/Users/bare/NFT/zenrepublic/testUser.json"
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
+
+[test.validator]
+url = "https://lingering-old-forest.solana-devnet.quiknode.pro/b117971e16b44a82c492776a0d5f6863a0d20993/"
+
+[[test.validator.clone]]
+address = "7fwA9aLTKmeueu9mJHU9QMBYEEfReMMMtkSoBBKXYwsH"
+
+[[test.validator.clone]]
+address = "HyHtUD3gsqEwGLLyMPb9D6BugbQagAme8SDsxTyQDXb"
+
+[[test.validator.clone]]
+address = "2iqp3bj3rKGJ9KT1U5rSkD57cKD4sWrXEAQ79oTVNvbW"
+
+[[test.validator.clone]]
+address = "DhcxghpJWmmoRbwB5CBezS6mUkD1G8fiwhjzCTFhth92"
+
+[[test.validator.clone]]
+address = "7Lu3rYkQaEyNXWUKZCPVn5ceZkH28QhR6QkmJRJ28U4L"
