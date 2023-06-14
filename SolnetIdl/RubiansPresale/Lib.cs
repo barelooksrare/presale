@@ -1,8 +1,10 @@
 ﻿using System.Text;
+using Presale.Accounts;
 using Presale.Program;
 using Solnet.Programs;
 using Solnet.Rpc;
 using Solnet.Rpc.Models;
+using Solnet.Rpc.Types;
 using Solnet.Wallet;
 
 namespace RubiansPresale
@@ -95,6 +97,17 @@ namespace RubiansPresale
                 SystemProgram = SystemProgram.ProgramIdKey
             };
             return PresaleProgram.ClaimAmount(accounts, (ushort) amount, PROGRAM_ID);
+        }
+
+        public static async Task<List<Allocation>> FetchAllocations(IRpcClient rpc)
+        {
+            var list = new List<Solnet.Rpc.Models.MemCmp>{new Solnet.Rpc.Models.MemCmp{Bytes = Allocation.ACCOUNT_DISCRIMINATOR_B58, Offset = 0}};
+            var res = await rpc.GetProgramAccountsAsync(PROGRAM_ID, Commitment.Confirmed, memCmpList: list);
+            if (!res.WasSuccessful || !(res.Result?.Count > 0))
+                return new List<Allocation>();
+            List<Allocation> resultingAccounts = new List<Allocation>(res.Result.Count);
+            resultingAccounts.AddRange(res.Result.Select(result => Allocation.Deserialize(Convert.FromBase64String(result.Account.Data[0]))));
+            return resultingAccounts;
         }
     }
 }
