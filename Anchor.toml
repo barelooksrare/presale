@@ -2,7 +2,7 @@
 seeds = false
 skip-lint = false
 [programs.localnet]
-presale = "ETTfbsihcY4rcAWdo4G7pATGNfr744LPv4ziheRz5EPu"
+presale = "41rsNvgfAqEqdMsSxegNghscr1xVoHi4aGZNjrpccG84"
 
 [registry]
 url = "https://api.apr.dev"
@@ -12,7 +12,9 @@ cluster = "Localnet"
 wallet = "/Users/bare/NFT/zenrepublic/testUser.json"
 
 [scripts]
-test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
+#test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
+test = "sh tests/test.sh ./SolnetIdl ./UnityIdl"
+
 
 [test.validator]
 url = "https://lingering-old-forest.solana-devnet.quiknode.pro/b117971e16b44a82c492776a0d5f6863a0d20993/"

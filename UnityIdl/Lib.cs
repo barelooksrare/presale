@@ -25,12 +25,15 @@ namespace RubiansPresale
             public static implicit operator PublicKey(KeyWithBump k) => k.Key;
         }
 
-        private static PublicKey PROGRAM_ID = new PublicKey("ETTfbsihcY4rcAWdo4G7pATGNfr744LPv4ziheRz5EPu");
+        private static PublicKey PROGRAM_ID = new PublicKey("41rsNvgfAqEqdMsSxegNghscr1xVoHi4aGZNjrpccG84");
         private static PublicKey TOKEN_METADATA_PROGRAM = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s");
         
         //Devnet
-        private static PublicKey PRESALE_TOKEN = new PublicKey("C2PQaR8QnS3C7peWVgAY4L2guSL1TYuT3qq4vQ88DjDf");
+        //private static PublicKey PRESALE_TOKEN = new PublicKey("C2PQaR8QnS3C7peWVgAY4L2guSL1TYuT3qq4vQ88DjDf");
         //Mainnet
+        // private static PublicKey PRESALE_TOKEN = new PublicKey("ESyHCUfKeT1ffLNRfCsjyHzNL4qN22kruVr8vYkPDR5r");
+        //Localnet
+        private static PublicKey PRESALE_TOKEN = new PublicKey("7fwA9aLTKmeueu9mJHU9QMBYEEfReMMMtkSoBBKXYwsH");
 
         public static KeyWithBump DerivePda(PublicKey programId, params object[] items)
         {
@@ -58,7 +61,7 @@ namespace RubiansPresale
 
         private static KeyWithBump GetPresaleTokenAccount(PublicKey exampleOrCollectionMint )
         {
-            return DerivePda(PROGRAM_ID, "vault", GetAllocationAccount(exampleOrCollectionMint));
+            return DerivePda(PROGRAM_ID, "vault", GetAllocationAccount(exampleOrCollectionMint).Key);
         }
 
         public static TransactionInstruction CreateCreateAllocationInstruction(int allocationSize ,PublicKey collectionOrExampleMint, PublicKey admin)

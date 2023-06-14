@@ -5,7 +5,7 @@ use anchor_spl::metadata::*;
 use anchor_spl::token;
 use anchor_spl::token::*;
 
-declare_id!("ETTfbsihcY4rcAWdo4G7pATGNfr744LPv4ziheRz5EPu");
+declare_id!("41rsNvgfAqEqdMsSxegNghscr1xVoHi4aGZNjrpccG84");
 
 #[program]
 pub mod presale {
@@ -34,7 +34,7 @@ pub mod presale {
         allocation.amount_allocated = allocation_amount;
         allocation.allocation_authority = ctx.accounts.signer.key();
         allocation.presale_token = ctx.accounts.presale_mint.key();
-        allocation.ref_mint = ctx.accounts.o.key();
+        allocation.ref_mint = ctx.accounts.allocation_ref_mint.key();
 
         let cpi_ctx = CpiContext::new(
             ctx.accounts.token_program.to_account_info(),
@@ -100,7 +100,7 @@ pub struct CreateAllocation<'info> {
     pub source_token_account: Account<'info, TokenAccount>,
     #[account(init, payer=signer, space=150, seeds=[allocation_ref_mint.key().as_ref(), presale_mint.key().as_ref()], bump)]
     pub allocation: Account<'info, Allocation>,
-    #[account(constraint = presale_mint.key().to_string() == "ESyHCUfKeT1ffLNRfCsjyHzNL4qN22kruVr8vYkPDR5r"||presale_mint.key().to_string()=="C2PQaR8QnS3C7peWVgAY4L2guSL1TYuT3qq4vQ88DjDf")]
+    #[account(constraint = presale_mint.key().to_string() == "ESyHCUfKeT1ffLNRfCsjyHzNL4qN22kruVr8vYkPDR5r"||presale_mint.key().to_string()=="C2PQaR8QnS3C7peWVgAY4L2guSL1TYuT3qq4vQ88DjDf" || presale_mint.key().to_string() == "7fwA9aLTKmeueu9mJHU9QMBYEEfReMMMtkSoBBKXYwsH")]
     pub presale_mint: Account<'info, Mint>,
     #[account(init, payer=signer, token::mint=presale_mint, token::authority=allocation, seeds=[b"vault", allocation.key().as_ref()], bump )]
     pub presale_token_vault: Account<'info, TokenAccount>,

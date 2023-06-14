@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RubiansPresale", "RubiansPresale\RubiansPresale.csproj", "{BF1A03DA-8D34-4A7A-AB69-960EFA1B3364}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presale.test", "Presale.test\Presale.test.csproj", "{4BF1D9B3-56FA-4C41-B53C-92AA6FB651EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{BF1A03DA-8D34-4A7A-AB69-960EFA1B3364}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF1A03DA-8D34-4A7A-AB69-960EFA1B3364}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF1A03DA-8D34-4A7A-AB69-960EFA1B3364}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BF1D9B3-56FA-4C41-B53C-92AA6FB651EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BF1D9B3-56FA-4C41-B53C-92AA6FB651EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BF1D9B3-56FA-4C41-B53C-92AA6FB651EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BF1D9B3-56FA-4C41-B53C-92AA6FB651EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

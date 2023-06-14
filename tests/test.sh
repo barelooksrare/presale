@@ -10,7 +10,7 @@ fi
 sln_dir=$(greadlink -f "$1")
 unity_scripts_dir=$(greadlink -f "$2")
 
-#dotnet build "$sln_dir"
+dotnet build "$sln_dir"
 
 # Create the target directory if it does not exist
 mkdir -p "$unity_scripts_dir"
@@ -23,7 +23,7 @@ do
         continue
     fi
 
-    if [[ $dir == *"*.test/" ]]; then
+    if [[ $dir == *".test/" ]]; then
         continue
     else 
         /Users/bare/RiderProjects/Solnet.Anchor/Solnet.Anchor.Tool/bin/Debug/net6.0/Solnet.Anchor.Tool -i ./target/idl/*.json -o "$dir"/Idl.cs;
@@ -38,4 +38,4 @@ do
     done
 done
 
-#dotnet test -l "console;verbosity=detailed" "$sln_dir"
+dotnet test -l "console;verbosity=detailed" "$sln_dir"
