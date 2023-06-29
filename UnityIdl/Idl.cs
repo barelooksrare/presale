@@ -125,6 +125,12 @@ namespace Presale
             return await SignAndSendTransaction(instr, feePayer, signingCallback);
         }
 
+        public async Task<RequestResult<string>> SendCloseAllocationAsync(CloseAllocationAccounts accounts, PublicKey feePayer, Func<byte[], PublicKey, byte[]> signingCallback, PublicKey programId)
+        {
+            Solana.Unity.Rpc.Models.TransactionInstruction instr = Program.PresaleProgram.CloseAllocation(accounts, programId);
+            return await SignAndSendTransaction(instr, feePayer, signingCallback);
+        }
+
         public async Task<RequestResult<string>> SendClaimAmountAsync(ClaimAmountAccounts accounts, ushort amount, PublicKey feePayer, Func<byte[], PublicKey, byte[]> signingCallback, PublicKey programId)
         {
             Solana.Unity.Rpc.Models.TransactionInstruction instr = Program.PresaleProgram.ClaimAmount(accounts, amount, programId);
@@ -156,6 +162,27 @@ namespace Presale
             public PublicKey RefMetadata { get; set; }
 
             public PublicKey TokenProgram { get; set; }
+
+            public PublicKey SystemProgram { get; set; }
+        }
+
+        public class CloseAllocationAccounts
+        {
+            public PublicKey Signer { get; set; }
+
+            public PublicKey SignerTokenAccount { get; set; }
+
+            public PublicKey Allocation { get; set; }
+
+            public PublicKey PresaleMint { get; set; }
+
+            public PublicKey PresaleTokenVault { get; set; }
+
+            public PublicKey AllocationRefMint { get; set; }
+
+            public PublicKey TokenProgram { get; set; }
+
+            public PublicKey AssociatedTokenProgram { get; set; }
 
             public PublicKey SystemProgram { get; set; }
         }
@@ -197,6 +224,19 @@ namespace Presale
                 offset += 8;
                 _data.WriteU16(allocationAmount, offset);
                 offset += 2;
+                byte[] resultData = new byte[offset];
+                Array.Copy(_data, resultData, offset);
+                return new Solana.Unity.Rpc.Models.TransactionInstruction{Keys = keys, ProgramId = programId.KeyBytes, Data = resultData};
+            }
+
+            public static Solana.Unity.Rpc.Models.TransactionInstruction CloseAllocation(CloseAllocationAccounts accounts, PublicKey programId)
+            {
+                List<Solana.Unity.Rpc.Models.AccountMeta> keys = new()
+                {Solana.Unity.Rpc.Models.AccountMeta.Writable(accounts.Signer, true), Solana.Unity.Rpc.Models.AccountMeta.Writable(accounts.SignerTokenAccount, false), Solana.Unity.Rpc.Models.AccountMeta.Writable(accounts.Allocation, false), Solana.Unity.Rpc.Models.AccountMeta.ReadOnly(accounts.PresaleMint, false), Solana.Unity.Rpc.Models.AccountMeta.Writable(accounts.PresaleTokenVault, false), Solana.Unity.Rpc.Models.AccountMeta.ReadOnly(accounts.AllocationRefMint, false), Solana.Unity.Rpc.Models.AccountMeta.ReadOnly(accounts.TokenProgram, false), Solana.Unity.Rpc.Models.AccountMeta.ReadOnly(accounts.AssociatedTokenProgram, false), Solana.Unity.Rpc.Models.AccountMeta.ReadOnly(accounts.SystemProgram, false)};
+                byte[] _data = new byte[1200];
+                int offset = 0;
+                _data.WriteU64(17675580351690764538UL, offset);
+                offset += 8;
                 byte[] resultData = new byte[offset];
                 Array.Copy(_data, resultData, offset);
                 return new Solana.Unity.Rpc.Models.TransactionInstruction{Keys = keys, ProgramId = programId.KeyBytes, Data = resultData};

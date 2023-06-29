@@ -82,6 +82,43 @@ namespace RubiansPresale
             return PresaleProgram.CreateAllocation(accounts, (ushort)allocationSize, PROGRAM_ID);
         }
 
+        public static TransactionInstruction CreateCloseAllocationInstruction(PublicKey collectionOrExampleMint, PublicKey admin)
+        {
+            var accounts = new CloseAllocationAccounts()
+            {
+                Signer = admin,
+                SignerTokenAccount = AssociatedTokenAccountProgram.DeriveAssociatedTokenAccount(admin, PRESALE_TOKEN),
+                Allocation = GetAllocationAccount(collectionOrExampleMint),
+                PresaleMint = PRESALE_TOKEN,
+                PresaleTokenVault = GetPresaleTokenAccount(collectionOrExampleMint),
+                AllocationRefMint = collectionOrExampleMint,
+                TokenProgram = TokenProgram.ProgramIdKey,
+                AssociatedTokenProgram = AssociatedTokenAccountProgram.ProgramIdKey,
+                SystemProgram = SystemProgram.ProgramIdKey
+            };
+
+            return PresaleProgram.CloseAllocation(accounts, PROGRAM_ID);
+        }
+
+        
+        public static TransactionInstruction CreateCloseAllocationInstruction(Allocation allocation)
+        {
+            var accounts = new CloseAllocationAccounts()
+            {
+                Signer = allocation.AllocationAuthority,
+                SignerTokenAccount = AssociatedTokenAccountProgram.DeriveAssociatedTokenAccount(allocation.AllocationAuthority, PRESALE_TOKEN),
+                Allocation = GetAllocationAccount(allocation.RefMint),
+                PresaleMint = PRESALE_TOKEN,
+                PresaleTokenVault = GetPresaleTokenAccount(allocation.RefMint),
+                AllocationRefMint = allocation.RefMint,
+                TokenProgram = TokenProgram.ProgramIdKey,
+                AssociatedTokenProgram = AssociatedTokenAccountProgram.ProgramIdKey,
+                SystemProgram = SystemProgram.ProgramIdKey
+            };
+
+            return PresaleProgram.CloseAllocation(accounts, PROGRAM_ID);
+        }
+
         public static TransactionInstruction CreateBuyPresaleInstruction(Presale.Accounts.Allocation allocation, int amount, PublicKey user, PublicKey userNftMint, PublicKey userNftTokenAccount = null )
         {
             userNftTokenAccount = userNftTokenAccount ?? AssociatedTokenAccountProgram.DeriveAssociatedTokenAccount(user, userNftMint);

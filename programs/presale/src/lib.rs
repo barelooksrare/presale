@@ -46,6 +46,27 @@ pub mod presale {
         );
         token::transfer(cpi_ctx, allocation_amount.into())
     }
+
+    pub fn close_allocation(ctx: Context<CloseAllocation>) -> Result<()> {
+        let close_ctx = CpiContext::new(
+            ctx.accounts.token_program.to_account_info(),
+            token::Transfer {
+                from: ctx.accounts.presale_token_vault.to_account_info(),
+                to: ctx.accounts.signer.to_account_info(),
+                authority: ctx.accounts.allocation.to_account_info(),
+            },
+        );
+
+        token::transfer(
+            close_ctx.with_signer(&[&[
+                ctx.accounts.allocation.ref_mint.key().as_ref(),
+                ctx.accounts.allocation.presale_token.as_ref(),
+                &[*ctx.bumps.get("allocation").unwrap()],
+            ]]),
+            ctx.accounts.presale_token_vault.amount as u64,
+        )
+    }
+
     pub fn claim_amount(ctx: Context<ClaimAmount>, amount: u16) -> Result<()> {
         if amount as u64 > ctx.accounts.presale_token_vault.amount {
             panic!("Sold out")
@@ -59,7 +80,7 @@ pub mod presale {
         if ctx.accounts.allocation.amount_spent > ctx.accounts.allocation.amount_allocated {
             panic!("Sold out")
         }
-        let to_pay = 8 * LAMPORTS_PER_SOL * amount as u64;
+        let to_pay = 6 * LAMPORTS_PER_SOL * amount as u64;
         let payment_ctx = CpiContext::new(
             ctx.accounts.system_program.to_account_info(),
             anchor_lang::system_program::Transfer {
@@ -108,6 +129,24 @@ pub struct CreateAllocation<'info> {
     #[account(constraint=ref_metadata.mint == allocation_ref_mint.key())]
     pub ref_metadata: Box<Account<'info, MetadataAccount>>,
     pub token_program: Program<'info, Token>,
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct CloseAllocation<'info> {
+    #[account(mut)]
+    pub signer: Signer<'info>,
+    #[account(init_if_needed, payer=signer, associated_token::mint = presale_mint, associated_token::authority=signer )]
+    pub signer_token_account: Account<'info, TokenAccount>,
+    #[account(mut, constraint=allocation.allocation_authority == signer.key(), close=signer, seeds=[allocation.ref_mint.key().as_ref(), presale_mint.key().as_ref()], bump)]
+    pub allocation: Account<'info, Allocation>,
+    #[account(constraint = presale_mint.key().to_string() == "ESyHCUfKeT1ffLNRfCsjyHzNL4qN22kruVr8vYkPDR5r"||presale_mint.key().to_string()=="C2PQaR8QnS3C7peWVgAY4L2guSL1TYuT3qq4vQ88DjDf" || presale_mint.key().to_string() == "7fwA9aLTKmeueu9mJHU9QMBYEEfReMMMtkSoBBKXYwsH")]
+    pub presale_mint: Account<'info, Mint>,
+    #[account(mut, close=signer, token::mint=presale_mint, token::authority=allocation, seeds=[b"vault", allocation.key().as_ref()], bump )]
+    pub presale_token_vault: Account<'info, TokenAccount>,
+    pub allocation_ref_mint: Account<'info, Mint>,
+    pub token_program: Program<'info, Token>,
+    pub associated_token_program: Program<'info, AssociatedToken>,
     pub system_program: Program<'info, System>,
 }
 

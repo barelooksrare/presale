@@ -23,7 +23,6 @@ public class UnitTest1
         var instruction = Lib.CreateCreateAllocationInstruction(100, new PublicKey("2iqp3bj3rKGJ9KT1U5rSkD57cKD4sWrXEAQ79oTVNvbW"), user.Account.PublicKey);
 
         var res = await PrepareAndSend(rpc, instruction, user.Account);
-        
         Console.WriteLine(res.RawRpcResponse);
 
     }
